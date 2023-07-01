@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<body>
+  <script type="text/javascript" src="main.js"></script>
+  <script type="module">
+    var options = {
+      print: (function () {
+        return function (text) {
+          text = Array.prototype.slice.call(arguments).join(' ');
+          console.info(text);
+        };
+      })(),
+      printErr: function (text) {
+        text = Array.prototype.slice.call(arguments).join(' ');
+        console.error(text);
+      },
+    };
+    let wasmModule = await loadvtkSmartPointerWasmModule(options);
+    console.log("Loaded vtkSmartPointer wasm");
+    let logRefCounts = (x) => {
+      console.log(`RefCounts JS=${x.$$.count.value},CPP=${x.GetReferenceCount()}`);
+    }
+    async function myLongRunningProcess(x, milliseconds) {
+      // sleep for the specified number of milliseconds
+      await new Promise(resolve => setTimeout(resolve, milliseconds));
+      logRefCounts(x);
+    }
+
+    const instance = new Module.vtkCustomObject();
+    logRefCounts(instance); // JS=1,CPP=1
+    myLongRunningProcess(instance.clone(), 5000);
+    logRefCounts(instance);// JS=2,CPP=1
+    myLongRunningProcess(instance.clone(), 3000);
+    logRefCounts(instance);// JS=3,CPP=1
+    // The C++ backing for `instance` will be deleted when the JS handle `instance` gets collected.
+  </script>
+</body>
+
+</html>

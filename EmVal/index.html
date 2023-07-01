@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <script type="text/javascript" src="main.js"></script>
+  <script type="module">
+    var options = {
+      print: (function () {
+        return function (text) {
+          text = Array.prototype.slice.call(arguments).join(' ');
+          console.info(text);
+        };
+      })(),
+      printErr: function (text) {
+        text = Array.prototype.slice.call(arguments).join(' ');
+        console.error(text);
+      },
+    };
+    let wasmModule = await loadEmValModule(options);
+    console.log("Loaded EmVal Wasm");
+    // Any javascript object can be sent to a function that accepts emscripten::val
+    let o1 = { 'key1': 0 };
+    let o2 = { 'key2': 1 };
+    console.log(`key1 exists in ${o1} = ${wasmModule.exists(o1, 'key1')}`);
+    console.log(`key2 exists in ${o1} = ${wasmModule.exists(o1, 'key2')}`);
+    console.log(`key1 exists in ${o2} = ${wasmModule.exists(o2, 'key1')}`);
+    console.log(`key2 exists in ${o2} = ${wasmModule.exists(o2, 'key2')}`);
+  </script>
+</body>
+
+</html>

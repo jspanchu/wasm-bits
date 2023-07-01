@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<body>
+  <script type="text/javascript" src="main.js"></script>
+  <script type="module">
+    var options = {
+      print: (function () {
+        return function (text) {
+          text = Array.prototype.slice.call(arguments).join(' ');
+          console.info(text);
+        };
+      })(),
+      printErr: function (text) {
+        text = Array.prototype.slice.call(arguments).join(' ');
+        console.error(text);
+      },
+    };
+    let wasmModule = await loadSharedPointerWasmModule(options);
+    console.log("Loaded SharedPointer wasm");
+    {
+      let instance = new wasmModule.MyClass();
+      instance.incrementX();
+      console.log(instance.x);
+      console.log(instance.x = 20);
+      console.log(Module.MyClass.getStringFromInstance(instance));
+    }
+      // JS instance gets garbage collected, C++ shared_ptr ref_count goes to 0.
+  </script>
+</body>
+
+</html>

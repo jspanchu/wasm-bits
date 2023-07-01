@@ -1,0 +1,1 @@
+em++ -sMODULARIZE -sWASM -sASSERTIONS -sEXPORT_NAME=createModule -sERROR_ON_UNDEFINED_SYMBOLS -sPROXY_TO_PTHREAD -sPTHREAD_POOL_SIZE=navigator.hardwareConcurrency -pthread main.cpp -o main.js
