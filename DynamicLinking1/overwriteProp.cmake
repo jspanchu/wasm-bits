@@ -1,0 +1,8 @@
+# -DCMAKE_PROJECT_INCLUDE="./overwriteProp.cmake"
+# From https://github.com/emscripten-core/emscripten/issues/15276#issuecomment-1039349267
+set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
+set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "-sSIDE_MODULE=1")
+set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "-sSIDE_MODULE=1")
+set(CMAKE_EXE_LINKER_FLAGS "-sMAIN_MODULE=1")
+set(CMAKE_SHARED_LIBRARY_SUFFIX ".wasm")
+set(CMAKE_STRIP FALSE) # Is this really required?
